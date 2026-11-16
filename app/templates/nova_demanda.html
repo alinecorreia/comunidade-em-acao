@@ -31,7 +31,7 @@
     <div class="campo">
       <label for="descricao">Descrição *</label>
       <textarea id="descricao" name="descricao" rows="4" maxlength="{{ TAMANHO_MAX_DESCRICAO }}" placeholder="Descreva o problema, incluindo o local e outras informações relevantes" {{ atributos_erro('descricao') }}>{{ dados.get('descricao', '') }}</textarea>
-      <p class="dica">Até {{ TAMANHO_MAX_DESCRICAO }} caracteres.</p>
+      <p class="dica" id="contador-descricao" aria-live="polite">Até {{ TAMANHO_MAX_DESCRICAO }} caracteres.</p>
       {{ erro('descricao') }}
     </div>
 
@@ -77,4 +77,14 @@
     </div>
   </form>
 </section>
+<script>
+  // Mostra quantos caracteres já foram usados na descrição.
+  const campo = document.getElementById("descricao");
+  const contador = document.getElementById("contador-descricao");
+  const atualizar = () => {
+    contador.textContent = campo.value.length + " de " + campo.maxLength + " caracteres usados";
+  };
+  campo.addEventListener("input", atualizar);
+  atualizar();
+</script>
 {% endblock %}
