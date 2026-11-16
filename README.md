@@ -32,7 +32,8 @@ Acesse http://127.0.0.1:5000. O banco é criado automaticamente em `instance/com
 ## Testes
 
 ```bash
-pytest
+pytest                                        # roda os testes
+pytest --cov=app --cov-report=term-missing    # roda os testes e mostra a cobertura
 ```
 
 - `tests/test_regras.py`: testes unitários das regras de validação.
