@@ -134,9 +134,8 @@ def atualizar_status(identificador, novo_status):
     return cursor.rowcount == 1
 
 
-@click.command("dados-exemplo")
-def comando_dados_exemplo():
-    """Insere demandas fictícias para demonstração."""
+def inserir_exemplos():
+    """Insere as demandas fictícias e devolve quantas foram gravadas."""
     hoje = date.today()
     for posicao, (titulo, descricao, categoria, prioridade, responsavel, status) in enumerate(
         EXEMPLOS
@@ -152,7 +151,17 @@ def comando_dados_exemplo():
             criada_em=(hoje - timedelta(days=len(EXEMPLOS) - 1 - posicao)).isoformat(),
             status=status,
         )
-    click.echo(f"{len(EXEMPLOS)} demandas fictícias inseridas.")
+    return len(EXEMPLOS)
+
+
+def banco_vazio():
+    return get_db().execute("SELECT COUNT(*) FROM demanda").fetchone()[0] == 0
+
+
+@click.command("dados-exemplo")
+def comando_dados_exemplo():
+    """Insere demandas fictícias para demonstração."""
+    click.echo(f"{inserir_exemplos()} demandas fictícias inseridas.")
 
 
 def registrar(app):
@@ -160,3 +169,6 @@ def registrar(app):
     app.cli.add_command(comando_dados_exemplo)
     with app.app_context():
         criar_tabelas()
+        # No ambiente de demonstração, o banco começa com os exemplos fictícios.
+        if app.config.get("DADOS_EXEMPLO") and banco_vazio():
+            inserir_exemplos()

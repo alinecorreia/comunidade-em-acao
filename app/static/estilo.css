@@ -73,7 +73,8 @@ input, select, textarea { font: inherit; min-height: 40px; padding: 8px 10px; bo
 .aviso.sucesso { background: #e3f6ea; border-color: #8fd3a8; color: #0d5c2e; font-weight: 600; }
 .aviso.atencao { background: #fdefc9; border-color: #ecc766; color: #6b4500; font-weight: 600; }
 .aviso.falha { background: #fde2e2; border-color: #f1a9a6; color: #9c1b17; font-weight: 600; margin-top: 12px; }
-.aviso.info { background: #e4eefc; border-color: #a9c6f2; color: #0f3f8f; margin-top: 16px; }
+.aviso.info { background: #e4eefc; border-color: #a9c6f2; color: #0f3f8f; }
+form .aviso.info { margin-top: 16px; }
 
 .detalhes { display: grid; grid-template-columns: max-content 1fr; gap: 10px 20px; margin: 16px 0; }
 .detalhes dt { font-weight: 700; }
