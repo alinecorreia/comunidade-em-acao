@@ -63,3 +63,27 @@ def detalhe(identificador):
     if demanda is None:
         abort(404)
     return render_template("detalhe.html", demanda=demanda)
+
+
+@bp.post("/demandas/<int:identificador>/status")
+def atualizar_status(identificador):
+    demanda = db.buscar_demanda(identificador)
+    if demanda is None:
+        abort(404)
+
+    novo_status = request.form.get("status", "")
+    if not regras.status_valido(novo_status):
+        abort(400)
+
+    numero = regras.numero_formatado(identificador)
+    if novo_status == demanda["status"]:
+        flash(f'A demanda {numero} já está com o status "{novo_status}".')
+    else:
+        db.atualizar_status(identificador, novo_status)
+        flash(
+            f"Status atualizado com sucesso. A demanda {numero} passou de "
+            f'"{demanda["status"]}" para "{novo_status}".'
+        )
+    if request.form.get("origem") == "detalhe":
+        return redirect(url_for("demandas.detalhe", identificador=identificador))
+    return redirect(url_for("demandas.consulta", destaque=identificador))

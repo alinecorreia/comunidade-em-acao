@@ -13,5 +13,16 @@
     <dt>Data de cadastro</dt><dd>{{ demanda['criada_em']|data_br }}</dd>
     <dt>Descrição</dt><dd>{{ demanda['descricao'] }}</dd>
   </dl>
+
+  <form class="acoes-linha" method="post" action="{{ url_for('demandas.atualizar_status', identificador=demanda['id']) }}">
+    <input type="hidden" name="origem" value="detalhe">
+    <label for="status">Atualizar status</label>
+    <select id="status" name="status">
+      {% for opcao in STATUS %}
+      <option {% if demanda['status'] == opcao %}selected{% endif %}>{{ opcao }}</option>
+      {% endfor %}
+    </select>
+    <button class="botao principal" type="submit">Atualizar status</button>
+  </form>
 </section>
 {% endblock %}

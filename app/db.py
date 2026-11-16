@@ -124,6 +124,16 @@ def contar_por_status():
     return {linha["status"]: linha["total"] for linha in linhas}
 
 
+def atualizar_status(identificador, novo_status):
+    """Altera o status e devolve True quando a demanda existe."""
+    db = get_db()
+    cursor = db.execute(
+        "UPDATE demanda SET status = ? WHERE id = ?", (novo_status, identificador)
+    )
+    db.commit()
+    return cursor.rowcount == 1
+
+
 @click.command("dados-exemplo")
 def comando_dados_exemplo():
     """Insere demandas fictícias para demonstração."""
