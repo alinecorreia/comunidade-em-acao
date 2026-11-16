@@ -71,6 +71,7 @@ input, select, textarea { font: inherit; min-height: 40px; padding: 8px 10px; bo
 
 .aviso { border: 1px solid; border-radius: 8px; padding: 10px 14px; margin: 0 0 12px; }
 .aviso.sucesso { background: #e3f6ea; border-color: #8fd3a8; color: #0d5c2e; font-weight: 600; }
+.aviso.atencao { background: #fdefc9; border-color: #ecc766; color: #6b4500; font-weight: 600; }
 .aviso.falha { background: #fde2e2; border-color: #f1a9a6; color: #9c1b17; font-weight: 600; margin-top: 12px; }
 .aviso.info { background: #e4eefc; border-color: #a9c6f2; color: #0f3f8f; margin-top: 16px; }
 
@@ -88,3 +89,7 @@ input, select, textarea { font: inherit; min-height: 40px; padding: 8px 10px; bo
   tr { border-bottom: 2px solid #dfe4ec; padding: 8px 0; }
   td { border: 0; padding: 4px 6px; }
 }
+
+/* Lista de demandas: mantém a coluna de ações dentro do cartão. */
+td .acoes-linha .botao { padding: 8px 10px; }
+td .acoes-linha select { width: 172px; padding: 8px 6px; }

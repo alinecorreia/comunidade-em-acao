@@ -18,8 +18,9 @@
     <input type="hidden" name="origem" value="detalhe">
     <label for="status">Atualizar status</label>
     <select id="status" name="status">
-      {% for opcao in STATUS %}
-      <option {% if demanda['status'] == opcao %}selected{% endif %}>{{ opcao }}</option>
+      <option value="">Escolha o novo status</option>
+      {% for opcao in STATUS if opcao != demanda['status'] %}
+      <option>{{ opcao }}</option>
       {% endfor %}
     </select>
     <button class="botao principal" type="submit">Atualizar status</button>

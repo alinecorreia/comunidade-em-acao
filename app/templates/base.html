@@ -24,8 +24,12 @@
     </nav>
 
     <main id="conteudo">
-      {% for mensagem in get_flashed_messages() %}
+      {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
+        {% if categoria == 'atencao' %}
+        <p class="aviso atencao" role="alert"><span aria-hidden="true">!</span> {{ mensagem }}</p>
+        {% else %}
         <p class="aviso sucesso" role="status"><span aria-hidden="true">✓</span> {{ mensagem }}</p>
+        {% endif %}
       {% endfor %}
       {% block conteudo %}{% endblock %}
     </main>

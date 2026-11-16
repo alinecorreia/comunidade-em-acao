@@ -68,3 +68,16 @@ def test_conteudo_digitado_e_escapado(cliente, demanda_valida):
     demanda_valida["titulo"] = "<script>alert(1)</script>"
     cadastrar(cliente, demanda_valida)
     assert "<script>alert(1)</script>" not in cliente.get("/demandas").text
+
+
+def test_lista_mostra_data_de_cadastro(cliente, demanda_valida):
+    from datetime import date
+
+    cadastrar(cliente, demanda_valida)
+    assert date.today().strftime("%d/%m/%Y") in cliente.get("/demandas").text
+
+
+def test_formulario_tem_contador_de_caracteres(cliente):
+    texto = cliente.get("/demandas/nova").text
+    assert 'id="contador-descricao"' in texto
+    assert "caracteres usados" in texto
