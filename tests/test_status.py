@@ -51,3 +51,12 @@ def test_painel_e_filtro_refletem_o_novo_status(cliente, demanda_valida):
     concluidas = cliente.get("/demandas?status=Concluída").text
     assert "Buraco na rua principal" in concluidas
     assert "Lixeira quebrada" not in concluidas
+
+
+def test_atualizar_pela_tela_de_detalhes_volta_para_ela(cliente, demanda_valida):
+    cadastrar(cliente, demanda_valida)
+    resposta = cliente.post(
+        "/demandas/1/status", data={"status": "Concluída", "origem": "detalhe"}
+    )
+    assert resposta.status_code == 302
+    assert resposta.headers["Location"].endswith("/demandas/1")

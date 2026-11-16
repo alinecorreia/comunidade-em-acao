@@ -84,4 +84,6 @@ def atualizar_status(identificador):
             f"Status atualizado com sucesso. A demanda {numero} passou de "
             f'"{demanda["status"]}" para "{novo_status}".'
         )
+    if request.form.get("origem") == "detalhe":
+        return redirect(url_for("demandas.detalhe", identificador=identificador))
     return redirect(url_for("demandas.consulta", destaque=identificador))
