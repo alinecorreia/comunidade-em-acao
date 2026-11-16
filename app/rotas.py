@@ -35,7 +35,8 @@ def nova_demanda():
             numero = db.inserir_demanda(dados)
             flash(
                 f"Demanda {regras.numero_formatado(numero)} cadastrada com sucesso "
-                f'com o status "{regras.STATUS_INICIAL}".'
+                f'com o status "{regras.STATUS_INICIAL}".',
+                "sucesso",
             )
             return redirect(url_for("demandas.consulta"))
     codigo = 400 if erros else 200
@@ -72,12 +73,13 @@ def atualizar_status(identificador):
         abort(404)
 
     novo_status = request.form.get("status", "")
-    if not regras.status_valido(novo_status):
-        abort(400)
-
     numero = regras.numero_formatado(identificador)
-    if novo_status == demanda["status"]:
-        flash(f'A demanda {numero} já está com o status "{novo_status}".')
+    if not novo_status:
+        flash(f"Escolha o novo status da demanda {numero} antes de confirmar.", "atencao")
+    elif not regras.status_valido(novo_status):
+        abort(400)
+    elif novo_status == demanda["status"]:
+        flash(f'A demanda {numero} já está com o status "{novo_status}".', "atencao")
     else:
         db.atualizar_status(identificador, novo_status)
         flash(
