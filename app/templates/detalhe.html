@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import "_partes.html" as partes %}
+{% block titulo %}Demanda {{ demanda['id']|numero }}{% endblock %}
+{% block conteudo %}
+<section class="bloco">
+  <a href="{{ url_for('demandas.consulta') }}">← Voltar para a lista</a>
+  <h1>Demanda {{ demanda['id']|numero }}: {{ demanda['titulo'] }}</h1>
+  <dl class="detalhes">
+    <dt>Status</dt><dd>{{ partes.status(demanda['status']) }}</dd>
+    <dt>Prioridade</dt><dd>{{ partes.prioridade(demanda['prioridade']) }}</dd>
+    <dt>Categoria</dt><dd>{{ demanda['categoria'] }}</dd>
+    <dt>Responsável</dt><dd>{{ demanda['responsavel'] or 'Não atribuído' }}</dd>
+    <dt>Data de cadastro</dt><dd>{{ demanda['criada_em']|data_br }}</dd>
+    <dt>Descrição</dt><dd>{{ demanda['descricao'] }}</dd>
+  </dl>
+</section>
+{% endblock %}

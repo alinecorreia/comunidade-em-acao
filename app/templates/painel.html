@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% import "_partes.html" as partes %}
+{% block titulo %}Painel{% endblock %}
+{% block conteudo %}
+<div class="cabecalho">
+  <div>
+    <h1>Painel de demandas</h1>
+    <p>Aqui você acompanha as demandas da nossa comunidade.</p>
+  </div>
+  <a class="botao principal" href="{{ url_for('demandas.nova_demanda') }}">+ Nova demanda</a>
+</div>
+
+<section class="cartoes" aria-label="Resumo por status">
+  <a class="cartao pendente" href="{{ url_for('demandas.consulta', status='Pendente') }}">
+    <span class="rotulo"><span aria-hidden="true">!</span> Pendentes</span>
+    <strong>{{ resumo['Pendente'] }}</strong>
+    <span>Aguardando atendimento</span>
+  </a>
+  <a class="cartao andamento" href="{{ url_for('demandas.consulta', status='Em andamento') }}">
+    <span class="rotulo"><span aria-hidden="true">↻</span> Em andamento</span>
+    <strong>{{ resumo['Em andamento'] }}</strong>
+    <span>Sendo atendidas</span>
+  </a>
+  <a class="cartao concluida" href="{{ url_for('demandas.consulta', status='Concluída') }}">
+    <span class="rotulo"><span aria-hidden="true">✓</span> Concluídas</span>
+    <strong>{{ resumo['Concluída'] }}</strong>
+    <span>Finalizadas com sucesso</span>
+  </a>
+</section>
+
+<section class="bloco">
+  <div class="cabecalho">
+    <h2>Demandas recentes</h2>
+    <a href="{{ url_for('demandas.consulta') }}">Ver todas</a>
+  </div>
+  {% if demandas %}
+  <table>
+    <thead>
+      <tr><th>#</th><th>Título</th><th>Categoria</th><th>Prioridade</th><th>Status</th><th>Data</th><th>Ações</th></tr>
+    </thead>
+    <tbody>
+      {% for d in demandas %}
+      <tr>
+        <td>{{ d['id']|numero }}</td>
+        <td>{{ d['titulo'] }}</td>
+        <td>{{ d['categoria'] }}</td>
+        <td>{{ partes.prioridade(d['prioridade']) }}</td>
+        <td>{{ partes.status(d['status']) }}</td>
+        <td>{{ d['criada_em']|data_br }}</td>
+        <td><a class="botao" href="{{ url_for('demandas.detalhe', identificador=d['id']) }}">Ver detalhes<span class="oculto"> da demanda {{ d['id']|numero }}</span></a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>Nenhuma demanda cadastrada ainda. Use o botão Nova demanda para registrar a primeira.</p>
+  {% endif %}
+</section>
+{% endblock %}

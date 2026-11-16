@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% import "_partes.html" as partes %}
+{% block titulo %}Consulta e acompanhamento de demandas{% endblock %}
+
+{% macro filtro(nome, rotulo, opcoes, todos) %}
+<div class="campo">
+  <label for="{{ nome }}">{{ rotulo }}</label>
+  <select id="{{ nome }}" name="{{ nome }}">
+    <option value="">{{ todos }}</option>
+    {% for opcao in opcoes %}
+    <option {% if filtros[nome] == opcao %}selected{% endif %}>{{ opcao }}</option>
+    {% endfor %}
+  </select>
+</div>
+{% endmacro %}
+
+{% block conteudo %}
+<div class="cabecalho">
+  <div>
+    <h1>Consulta e acompanhamento de demandas</h1>
+    <p>Busque, filtre e atualize o status das demandas da comunidade.</p>
+  </div>
+  <a class="botao principal" href="{{ url_for('demandas.nova_demanda') }}">+ Nova demanda</a>
+</div>
+
+<form class="bloco filtros" method="get" role="search">
+  <div class="campo">
+    <label for="busca">Buscar demanda</label>
+    <input id="busca" name="busca" type="search" value="{{ filtros['busca'] }}" placeholder="Título ou número">
+  </div>
+  {{ filtro('categoria', 'Categoria', CATEGORIAS, 'Todas') }}
+  {{ filtro('prioridade', 'Prioridade', PRIORIDADES, 'Todas') }}
+  {{ filtro('status', 'Status', STATUS, 'Todos') }}
+  {{ filtro('responsavel', 'Responsável', RESPONSAVEIS + ['Não atribuído'], 'Todos') }}
+  <button class="botao principal" type="submit">Filtrar</button>
+  <a class="botao" href="{{ url_for('demandas.consulta') }}">Limpar filtros</a>
+</form>
+
+<section class="bloco">
+  <div class="cabecalho">
+    <h2>Lista de demandas</h2>
+    <p>{{ demandas|length }} {{ 'demanda encontrada' if demandas|length == 1 else 'demandas encontradas' }}</p>
+  </div>
+  {% if demandas %}
+  <table>
+    <thead>
+      <tr><th>#</th><th>Título</th><th>Categoria</th><th>Prioridade</th><th>Responsável</th><th>Status</th><th>Ações</th></tr>
+    </thead>
+    <tbody>
+      {% for d in demandas %}
+      <tr {% if destaque == d['id'] %}class="destaque"{% endif %}>
+        <td>{{ d['id']|numero }}</td>
+        <td>{{ d['titulo'] }}</td>
+        <td>{{ d['categoria'] }}</td>
+        <td>{{ partes.prioridade(d['prioridade']) }}</td>
+        <td>{{ d['responsavel'] or 'Não atribuído' }}</td>
+        <td>{{ partes.status(d['status']) }}</td>
+        <td>
+          <div class="acoes-linha">
+            <a class="botao" href="{{ url_for('demandas.detalhe', identificador=d['id']) }}">Ver detalhes<span class="oculto"> da demanda {{ d['id']|numero }}</span></a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>Nenhuma demanda encontrada com esses filtros. Use Limpar filtros para ver todas.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,11 @@
+{# Status e prioridade sempre com símbolo e texto, nunca só com cor. #}
+{% macro status(valor) %}
+  {% set simbolo = {'Pendente': '!', 'Em andamento': '↻', 'Concluída': '✓'}[valor] %}
+  {% set classe = {'Pendente': 'pendente', 'Em andamento': 'andamento', 'Concluída': 'concluida'}[valor] %}
+  <span class="etiqueta {{ classe }}"><span aria-hidden="true">{{ simbolo }}</span> {{ valor }}</span>
+{% endmacro %}
+
+{% macro prioridade(valor) %}
+  {% set simbolo = {'Alta': '▲', 'Média': '■', 'Baixa': '▼'}[valor] %}
+  <span class="prioridade {{ valor|lower|replace('é', 'e') }}"><span aria-hidden="true">{{ simbolo }}</span> {{ valor }}</span>
+{% endmacro %}

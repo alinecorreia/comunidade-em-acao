@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block titulo %}Cadastrar nova demanda{% endblock %}
+
+{% macro erro(campo) %}
+  {% if erros.get(campo) %}
+  <p class="erro" id="erro-{{ campo }}"><span aria-hidden="true">!</span> {{ erros[campo] }}</p>
+  {% endif %}
+{% endmacro %}
+
+{% macro atributos_erro(campo) %}
+  {% if erros.get(campo) %}aria-invalid="true" aria-describedby="erro-{{ campo }}"{% endif %}
+{% endmacro %}
+
+{% block conteudo %}
+<section class="bloco">
+  <a href="{{ url_for('demandas.painel') }}">← Voltar</a>
+  <h1>Cadastrar nova demanda</h1>
+  <p>Preencha as informações abaixo para registrar uma nova solicitação. Campos com * são obrigatórios.</p>
+
+  {% if erros %}
+  <p class="aviso falha" role="alert"><span aria-hidden="true">!</span> A demanda não foi salva. Corrija os campos indicados.</p>
+  {% endif %}
+
+  <form method="post" novalidate>
+    <div class="campo">
+      <label for="titulo">Título *</label>
+      <input id="titulo" name="titulo" maxlength="{{ TAMANHO_MAX_TITULO }}" value="{{ dados.get('titulo', '') }}" placeholder="Ex.: Lâmpada apagada na praça" {{ atributos_erro('titulo') }}>
+      {{ erro('titulo') }}
+    </div>
+
+    <div class="campo">
+      <label for="descricao">Descrição *</label>
+      <textarea id="descricao" name="descricao" rows="4" maxlength="{{ TAMANHO_MAX_DESCRICAO }}" placeholder="Descreva o problema, incluindo o local e outras informações relevantes" {{ atributos_erro('descricao') }}>{{ dados.get('descricao', '') }}</textarea>
+      <p class="dica">Até {{ TAMANHO_MAX_DESCRICAO }} caracteres.</p>
+      {{ erro('descricao') }}
+    </div>
+
+    <div class="linha">
+      <div class="campo">
+        <label for="categoria">Categoria *</label>
+        <select id="categoria" name="categoria" {{ atributos_erro('categoria') }}>
+          <option value="">Selecione uma categoria</option>
+          {% for opcao in CATEGORIAS %}
+          <option {% if dados.get('categoria') == opcao %}selected{% endif %}>{{ opcao }}</option>
+          {% endfor %}
+        </select>
+        {{ erro('categoria') }}
+      </div>
+      <div class="campo">
+        <label for="prioridade">Prioridade *</label>
+        <select id="prioridade" name="prioridade" {{ atributos_erro('prioridade') }}>
+          <option value="">Selecione a prioridade</option>
+          {% for opcao in PRIORIDADES %}
+          <option {% if dados.get('prioridade') == opcao %}selected{% endif %}>{{ opcao }}</option>
+          {% endfor %}
+        </select>
+        {{ erro('prioridade') }}
+      </div>
+    </div>
+
+    <div class="campo metade">
+      <label for="responsavel">Responsável (opcional)</label>
+      <select id="responsavel" name="responsavel" {{ atributos_erro('responsavel') }}>
+        <option value="">Não atribuído</option>
+        {% for opcao in RESPONSAVEIS %}
+        <option {% if dados.get('responsavel') == opcao %}selected{% endif %}>{{ opcao }}</option>
+        {% endfor %}
+      </select>
+      {{ erro('responsavel') }}
+    </div>
+
+    <p class="aviso info"><span aria-hidden="true">i</span> A nova demanda será cadastrada com o status inicial "Pendente".</p>
+
+    <div class="acoes">
+      <a class="botao" href="{{ url_for('demandas.painel') }}">Cancelar</a>
+      <button class="botao principal" type="submit">Salvar demanda</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

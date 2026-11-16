@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}{% endblock %} | Comunidade em Ação</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+  <header class="topo">
+    <div>
+      <p class="marca">Comunidade em Ação</p>
+      <p class="submarca">Gestão de Demandas</p>
+    </div>
+    <p class="usuario">Voluntário <span>(modo demonstração)</span></p>
+  </header>
+
+  <div class="estrutura">
+    <nav class="menu" aria-label="Menu principal">
+      <a href="{{ url_for('demandas.painel') }}" {% if request.endpoint == 'demandas.painel' %}aria-current="page"{% endif %}>Painel</a>
+      <a href="{{ url_for('demandas.consulta') }}" {% if request.endpoint in ('demandas.consulta', 'demandas.detalhe', 'demandas.nova_demanda') %}aria-current="page"{% endif %}>Demandas</a>
+      <p class="ods"><strong>ODS 11</strong> Cidades e Comunidades Sustentáveis</p>
+    </nav>
+
+    <main id="conteudo">
+      {% for mensagem in get_flashed_messages() %}
+        <p class="aviso sucesso" role="status"><span aria-hidden="true">✓</span> {{ mensagem }}</p>
+      {% endfor %}
+      {% block conteudo %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>
