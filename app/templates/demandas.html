@@ -58,6 +58,15 @@
         <td>
           <div class="acoes-linha">
             <a class="botao" href="{{ url_for('demandas.detalhe', identificador=d['id']) }}">Ver detalhes<span class="oculto"> da demanda {{ d['id']|numero }}</span></a>
+            <form method="post" action="{{ url_for('demandas.atualizar_status', identificador=d['id']) }}">
+              <label class="oculto" for="status-{{ d['id'] }}">Novo status da demanda {{ d['id']|numero }}</label>
+              <select id="status-{{ d['id'] }}" name="status">
+                {% for opcao in STATUS %}
+                <option {% if d['status'] == opcao %}selected{% endif %}>{{ opcao }}</option>
+                {% endfor %}
+              </select>
+              <button class="botao principal" type="submit">Atualizar status</button>
+            </form>
           </div>
         </td>
       </tr>
