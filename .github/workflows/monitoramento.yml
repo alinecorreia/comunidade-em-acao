@@ -1,6 +1,10 @@
 name: Monitoramento
 
 # Verifica a cada 15 minutos se a aplicação publicada está no ar.
+# Painel do workflow "Monitoramento" no GitHub Actions do repositório alinecorreia/comunidade-em-acao. 
+# As execuções em verde mostram que a rota /saude da aplicação publicada em https://comunidade-em-acao.onrender.com respondeu HTTP 200, com aplicação e banco funcionando (status UP). 
+# A verificação roda a cada 15 minutos. 
+# Uma execução em vermelho indicaria indisponibilidade (status DOWN) e geraria alerta por e-mail.
 on:
   schedule:
     - cron: "*/15 * * * *"
