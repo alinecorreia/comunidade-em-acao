@@ -35,7 +35,11 @@ O arquivo `render.yaml` publica a aplicação no [Render](https://render.com) co
 
 O plano gratuito não tem disco persistente: o banco SQLite é recriado a cada reinício do serviço. Serve para demonstração, não para uso real da associação.
 
-A rota `/saude` responde se a aplicação e o banco estão funcionando e é usada pelo monitoramento.
+Aplicação publicada: https://comunidade-em-acao.onrender.com
+
+## Monitoramento
+
+A rota `/saude` responde se a aplicação e o banco estão funcionando. O workflow `.github/workflows/monitoramento.yml` consulta essa rota a cada 15 minutos pelo GitHub Actions. Se a aplicação não responder, a execução falha e o GitHub envia um e-mail de aviso. O histórico fica na aba Actions do repositório.
 
 ## Testes
 
