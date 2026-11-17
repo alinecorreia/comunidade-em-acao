@@ -1,0 +1,31 @@
+name: Monitoramento
+
+# Verifica a cada 15 minutos se a aplicação publicada está no ar.
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+jobs:
+  disponibilidade:
+    runs-on: ubuntu-latest
+    env:
+      URL: https://comunidade-em-acao.onrender.com/saude
+    steps:
+      - name: Consultar a rota /saude
+        run: |
+          # O plano gratuito hiberna sem uso, então a primeira resposta pode demorar.
+          for tentativa in 1 2 3; do
+            codigo=$(curl -s -o resposta.json -w "%{http_code}" --max-time 90 "$URL" || true)
+            echo "Tentativa $tentativa: HTTP $codigo"
+            if [ "$codigo" = "200" ] && grep -q '"status":"ok"' resposta.json; then
+              echo "UP: aplicação e banco respondendo."
+              cat resposta.json
+              echo "### UP: aplicação no ar (HTTP 200)" >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            sleep 20
+          done
+          echo "DOWN: a aplicação não respondeu corretamente em 3 tentativas."
+          echo "### DOWN: aplicação fora do ar (último HTTP $codigo)" >> "$GITHUB_STEP_SUMMARY"
+          exit 1
