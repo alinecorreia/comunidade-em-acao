@@ -1,0 +1,16 @@
+# Configuração de publicação no Render (https://render.com).
+services:
+  - type: web
+    name: comunidade-em-acao
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn "app:create_app()"
+    healthCheckPath: /saude
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DADOS_EXEMPLO
+        value: "1"

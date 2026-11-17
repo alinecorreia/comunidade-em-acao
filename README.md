@@ -29,6 +29,14 @@ flask --app app run
 
 Acesse http://127.0.0.1:5000. O banco é criado automaticamente em `instance/comunidade.sqlite`.
 
+## Publicação
+
+O arquivo `render.yaml` publica a aplicação no [Render](https://render.com) com gunicorn. No ambiente publicado, a variável `DADOS_EXEMPLO=1` carrega as demandas fictícias e exibe um aviso de demonstração.
+
+O plano gratuito não tem disco persistente: o banco SQLite é recriado a cada reinício do serviço. Serve para demonstração, não para uso real da associação.
+
+A rota `/saude` responde se a aplicação e o banco estão funcionando e é usada pelo monitoramento.
+
 ## Testes
 
 ```bash

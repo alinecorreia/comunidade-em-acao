@@ -1,6 +1,16 @@
 """Telas do sistema: painel, cadastro, consulta e acompanhamento."""
 
-from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
+from flask import (
+    Blueprint,
+    abort,
+    current_app,
+    flash,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
 
 from . import db, regras
 
@@ -16,7 +26,18 @@ def listas_para_templates():
         "RESPONSAVEIS": regras.RESPONSAVEIS,
         "TAMANHO_MAX_TITULO": regras.TAMANHO_MAX_TITULO,
         "TAMANHO_MAX_DESCRICAO": regras.TAMANHO_MAX_DESCRICAO,
+        "AMBIENTE_DEMONSTRACAO": current_app.config.get("DADOS_EXEMPLO", False),
     }
+
+
+@bp.get("/saude")
+def saude():
+    """Verificação usada pelo monitoramento: confirma que o app e o banco respondem."""
+    try:
+        total = sum(db.contar_por_status().values())
+    except Exception:
+        return jsonify(status="erro", banco="indisponível"), 503
+    return jsonify(status="ok", banco="ok", demandas=total)
 
 
 @bp.get("/")

@@ -24,6 +24,9 @@
     </nav>
 
     <main id="conteudo">
+      {% if AMBIENTE_DEMONSTRACAO %}
+      <p class="aviso info"><span aria-hidden="true">i</span> Ambiente de demonstração com dados fictícios. Não informe nomes, telefones ou endereços reais. Os registros podem ser apagados a qualquer momento.</p>
+      {% endif %}
       {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
         {% if categoria == 'atencao' %}
         <p class="aviso atencao" role="alert"><span aria-hidden="true">!</span> {{ mensagem }}</p>

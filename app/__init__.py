@@ -14,6 +14,8 @@ def create_app(config=None):
         # Em produção, defina SECRET_KEY no ambiente. O valor padrão serve só para desenvolvimento.
         SECRET_KEY=os.environ.get("SECRET_KEY", "chave-apenas-para-desenvolvimento"),
         DATABASE=os.path.join(app.instance_path, "comunidade.sqlite"),
+        # DADOS_EXEMPLO=1 identifica o ambiente de demonstração publicado.
+        DADOS_EXEMPLO=os.environ.get("DADOS_EXEMPLO") == "1",
     )
     if config:
         app.config.update(config)
